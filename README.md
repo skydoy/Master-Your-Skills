@@ -14,7 +14,7 @@
   <a href="#install-in-3-minutes">Install</a> ·
   <a href="#does-it-work">Benchmark</a> ·
   <a href="GLOSSARY.md">All skills</a> ·
-  <a href="docs/AUDITORIA.md">Source audit</a> ·
+  <a href="docs/AUDIT.md">Source audit</a> ·
   <a href="#faq">FAQ</a>
 </p>
 <p align="center"><img src="docs/img/hero.png" width="880" alt="Master Your Skills: short skills that prove they work"></p>
@@ -114,7 +114,7 @@ What each one does, when to use it, and its measured gain: **[GLOSSARY.md](GLOSS
 
 ## Why this repo
 
-We audited 11 popular skill and agent repos ([docs/AUDITORIA.md](docs/AUDITORIA.md)). Most are 20,000 to 1,000,000 words, and only one measures results with and without its skill. Here the rules are:
+We audited 11 popular skill and agent repos ([docs/AUDIT.md](docs/AUDIT.md)). Most are 20,000 to 1,000,000 words, and only one measures results with and without its skill. Here the rules are:
 
 1. **Measured, not promised.** A number appears in this README only if a results file backs it.
 2. **Short.** One read per skill. Extra detail sits in a `reference.md` that loads only when needed.
