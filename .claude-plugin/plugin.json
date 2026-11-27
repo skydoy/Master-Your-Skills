@@ -1,0 +1,12 @@
+{
+  "name": "master-your-skills",
+  "version": "1.0.0",
+  "description": "One AGENTS.md plus 60 skills unified from ponytail, agent-skills and mattpocock/skills: lazy minimal code, spec-to-ship workflow, real-engineering habits.",
+  "author": {
+    "name": "skydoy",
+    "url": "https://github.com/skydoy"
+  },
+  "homepage": "https://github.com/skydoy/Master-Your-Skills",
+  "repository": "https://github.com/skydoy/Master-Your-Skills",
+  "license": "MIT"
+}

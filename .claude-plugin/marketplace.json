@@ -1,0 +1,15 @@
+{
+  "name": "master-your-skills",
+  "owner": {
+    "name": "skydoy",
+    "url": "https://github.com/skydoy"
+  },
+  "description": "Unified AGENTS.md plus engineering skills from ponytail, agent-skills and mattpocock/skills.",
+  "plugins": [
+    {
+      "name": "master-your-skills",
+      "source": "./",
+      "description": "AGENTS.md rules plus 60 engineering skills, slash commands and review agents in one plugin."
+    }
+  ]
+}
