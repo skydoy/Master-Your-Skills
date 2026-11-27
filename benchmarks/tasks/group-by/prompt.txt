@@ -1,0 +1,1 @@
+Add a function group_by(records, key) to records.py that takes a list of dicts and returns a dict mapping each value of `key` to the list of records with that value, keeping input order.

@@ -1,0 +1,1 @@
+Add a --json flag to wordcount.py that prints the counts as a JSON object with keys lines, words and chars instead of the plain line.

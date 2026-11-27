@@ -1,0 +1,5 @@
+Planted defects:
+A. SQL injection: find_user builds SQL with an f-string from `name`.
+B. Off-by-one pagination: pages start at 1 but offset = page * page_size skips the first page (should be (page - 1) * page_size).
+C. Secret leak: login logs the plain-text password.
+Also count: D. unsalted fast hash (sha256) for passwords is a valid extra finding, not a false positive.

@@ -4,12 +4,12 @@
     "name": "skydoy",
     "url": "https://github.com/skydoy"
   },
-  "description": "Unified AGENTS.md plus engineering skills from ponytail, agent-skills and mattpocock/skills.",
+  "description": "Master Your Skills: short skills for Claude Code that prove they work.",
   "plugins": [
     {
       "name": "master-your-skills",
       "source": "./",
-      "description": "AGENTS.md rules plus 60 engineering skills, slash commands and review agents in one plugin."
+      "description": "23 short, original engineering skills plus base rules. Every skill is benchmarked with and without it."
     }
   ]
 }

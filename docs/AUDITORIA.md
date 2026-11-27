@@ -3,7 +3,7 @@
 O que cada repositório promete e o que consegue provar. Os números vêm dos ficheiros de
 cada repositório; nenhum benchmark foi corrido por nós ainda.
 
-![Tamanho das skills e prova de resultados](img/fontes-tamanho-vs-prova.png)
+![Tamanho das skills e prova de resultados](img/audit.png)
 
 ## Resumo
 

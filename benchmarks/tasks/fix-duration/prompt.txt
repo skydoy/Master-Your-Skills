@@ -1,0 +1,1 @@
+Users report that parse_duration("2h") returns 0 instead of 7200. Fix the bug in this repo.

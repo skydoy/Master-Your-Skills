@@ -1,38 +1,47 @@
 ---
 name: tdd
-description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests.
+description: Write the failing test first, then the code, one behavior at a time, with tests that catch real bugs. Use when the user says "TDD", "test first", "red-green", "add tests", or when you implement logic, fix a bug, or change behavior.
 ---
 
-# Test-Driven Development
+Prove each behavior with a test you watched fail, then make it pass with the least code.
 
-TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Every section applies on every cycle: consult them before and during the loop, not after.
+## Do this
 
-When exploring the codebase, read `GLOSSARY.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching.
+1. **Learn how this repo tests.** Find the framework and two commands: one test file, and the full suite. Copy the style of the nearest existing test.
+2. **Pick the seam.** Test through the public interface a caller uses (a function, an endpoint, a command), never private helpers. For a new module, list the seams and confirm them with the user first.
+3. **Name the break.** Before writing the test, say which wrong production change would turn it red ("returns the old price", "skips the last item"). Can't name one? The test checks nothing.
+4. **Red.** Write one test for one behavior. Expected values are literals you worked out by hand, never computed with the code under test. Run it. It must fail on the assertion, for the reason you named; an import error is not red. Passes at once? It tests existing behavior; rethink it.
+5. **Green.** Simplest code that passes; nothing a test doesn't demand yet. Run it.
+6. **Tidy** while green: remove duplication, fix names, rerun.
+7. **Repeat** from step 3, letting each cycle shape the next test.
+8. **Close.** Run the full suite. Then flip one condition in your new code (a `<` to `<=`, drop a `!`), confirm a test goes red, and restore the file. Report any failure by name, even ones you didn't cause.
 
-## What a good test is
+Bug fix: the first test reproduces the reported symptom and must fail before you touch the code.
 
-Tests verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't. A good test reads like a specification: "user can checkout with valid cart" tells you exactly what capability exists, and it survives refactors because it doesn't care about internal structure.
+## Good tests
 
-See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
+- Named as behavior: `rejects an expired coupon`.
+- Survive a refactor that keeps behavior.
+- Mock only what you don't own or can't control: network, clock, randomness, paid APIs. Your own modules stay real.
+- Each test sets up its own state and runs in any order.
 
-## Seams: where tests go
+## Traps
 
-A **seam** is the public boundary you test at: the interface where you observe behavior without reaching inside. Tests live at seams, never against internals.
+- **Mirror test:** the expected value is computed the way the code computes it, so it can never disagree.
+- **Mock test:** asserting the mock was called proves the mock exists, not that the feature works.
+- **Change detector:** asserting a constant or exact wording; fires on redesign, sleeps through bugs.
+- **All tests first:** a batch of tests written before any code locks in an imagined design.
+- **Sleeps:** wait for the condition, not a fixed delay, or the test goes flaky under load.
 
-**Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them with the user. No test is written at an unconfirmed seam. You can't test everything, so agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
+## Stop and ask when
 
-Ask: "What's the public interface, and which seams should we test?" Give each proposed seam a one-line note on what it catches and what it misses.
+- The only way to test needs a large refactor or a new test framework.
+- The design is so tangled that tests need piles of mocks. Hard to test means hard to use; say so.
 
-When the shape of that interface is itself in question (how deep the module is, where the seam belongs, what the interface should expose), call the Skill tool with "codebase-design" for the vocabulary. It is the shared source of the module, interface, depth, seam, adapter, leverage and locality terms, and it is a reference to consult, not a session to run.
+Skip the loop for config, docs, generated code and throwaway prototypes.
 
-## Anti-patterns
+## Done when
 
-- **Implementation-coupled**: mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behavior hasn't changed.
-- **Tautological**: the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values must come from an independent source of truth: a known-good literal, a worked example, the spec.
-- **Horizontal slicing**: writing all tests first, then all implementation. Bulk tests verify _imagined_ behavior: you test the _shape_ of things rather than user-facing behavior, the tests go insensitive to real changes, and you commit to test structure before understanding the implementation. Work in **vertical slices** instead: one test → one implementation → repeat, each test a **tracer bullet** that responds to what the last cycle taught you.
-
-## Rules of the loop
-
-- **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
-- **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** It belongs to the review stage (see the `code-review` skill), not the red → green implementation cycle.
+- Every new behavior has a test that you saw fail for the named reason.
+- The full suite passes, with no new warnings.
+- The mutation check in step 8 turned a test red.

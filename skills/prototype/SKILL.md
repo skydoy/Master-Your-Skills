@@ -1,26 +1,35 @@
 ---
 name: prototype
-description: Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like.
+description: Build a throwaway prototype that answers one design question, then keep the answer and bin the code. Use when someone asks "will this state model hold up?", "what should this page look like?", wants to try a few layouts, or wants to click through logic before building it for real.
 ---
 
-# Prototype
+A prototype is a question with code attached. Answer it fast, record the verdict, keep the code out of main.
 
-A prototype is **throwaway code that answers a question**. The question decides the shape.
+## Do this
 
-## Pick a branch
+1. **Write the question and what would change your mind.** One sentence each, at the top of the prototype: "Can an order be partly cancelled after shipping? If the walkthrough reaches an impossible state, we redesign the states." Set a timebox (an hour or two). No clear question? You need a spec instead.
+2. **Pick the shape by the question.**
+   - *Logic or state* ("does this model hold up?") → one self-contained HTML file, no build or server. Logic lives in a small pure module (reducer, state machine or functions) with no DOM access, so it lifts into real code later. Around it: current state as labelled fields re-rendered after every action, one button per action, and a few scripted scenarios (happy path, edge case, something that must be refused), each from the same start. Domain words, not code names, so a non-developer can drive it.
+   - *Look and layout* ("what should this be?") → 3 variants (max 5) on the real page behind `?variant=`, with real data and density; on an empty page every variant looks fine. No host page? A route with "prototype" in its name, per the project's routing. Variants differ in structure, not color. A small floating switcher (arrows and arrow keys, ignored while typing) updates the URL and is excluded from production builds.
+   Ambiguous and nobody to ask? Pick by surrounding code (module → logic, page → look) and say so at the top.
+3. **Cut everything that doesn't serve the answer.** No tests, no abstractions, no persistence (memory only; if storage is the question, a scratch DB named to be wiped), no real writes (stubs).
+4. **Hand it over with one command or one file.** Give the path or URL and what to try. "That shouldn't be possible" and "header from B, sidebar from C" are the real results.
+5. **Record the verdict, then clear main.** Write the question, the answer and why in the issue, spec or commit message. Move the prototype to a throwaway branch and link it from there. Main gets only the decision: the lifted logic module, or the winning variant rebuilt properly with tests and error handling.
 
-Identify which question is being answered, using the user's prompt, the surrounding code, or by asking if the user is around:
+## Stop and ask when
 
-- **"Does this logic / state model feel right?"** → [LOGIC.md](LOGIC.md). Build a single shareable HTML file (free-play buttons plus tabbed guided walkthroughs) that pushes the state machine through cases that are hard to reason about on paper, and that a non-developer can drive.
-- **"What should this look like?"** → [UI.md](UI.md). Generate several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar.
+- The prototype would need production data, real credentials or real writes.
+- The timebox is spent without an answer: report what you learned and ask whether the question was wrong.
 
-The two branches produce very different artifacts, so getting this wrong wastes the whole prototype. If the question is genuinely ambiguous and the user isn't reachable, default to whichever branch better matches the surrounding code (a backend module → logic; a page or component → UI) and state the assumption at the top of the prototype.
+## Done when
 
-## Rules that apply to both
+- The question and the verdict are written down where the real work is tracked.
+- Prototype code is off main, on a linked throwaway branch.
+- Anything kept went through normal build and test rules.
+- No switcher, prototype route or scratch storage is left in production paths.
 
-1. **Throwaway from day one, and clearly marked as such.** Locate the prototype code close to where it will actually be used (next to the module or page it's prototyping for) so context is obvious, but name it so a casual reader can see it's a prototype, not production. For throwaway UI routes, obey whatever routing convention the project already uses; don't invent a new top-level structure.
-2. **Trivial to run.** A UI prototype starts from one command in the project's task runner: `pnpm <name>`, `python <path>`, `bun <path>`, etc. A logic demo is a single HTML file the user double-clicks. Either way, no thinking required to start it.
-3. **No persistence by default.** State lives in memory. Persistence is the thing the prototype is _checking_, not something it should depend on. If the question explicitly involves a database, hit a scratch DB or a local file with a clear "PROTOTYPE, wipe me" name.
-4. **Skip the polish.** No tests, no error handling beyond what makes the prototype _runnable_, no abstractions. The point is to learn something fast.
-5. **Surface the state.** After every action (logic) or on every variant switch (UI), print or render the full relevant state so the user can see what changed.
-6. **Capture it when done.** Fold any validated decision into the real code, then capture the prototype itself as a **primary source**: commit it to a throwaway branch, out of main, and leave a context pointer to that branch on the implementation issue. Capture the answer too (the verdict and the question it settled) in the issue or a commit. The main branch keeps only the validated decision.
+## Traps
+
+- Polishing a prototype until it becomes the product.
+- Three variants that are the same card grid in different colors.
+- Logic tangled with button handlers, so nothing can be lifted out.

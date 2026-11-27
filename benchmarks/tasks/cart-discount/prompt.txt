@@ -1,0 +1,1 @@
+Add discount codes to Cart. Cart.apply_code(code) applies a code: "SAVE10" gives 10% off the total, "FLAT500" gives 500 cents off. Only one code can be active (applying a new one replaces the old). Unknown codes raise ValueError. The total never goes below 0 and is rounded down to whole cents. total() must include the discount.
