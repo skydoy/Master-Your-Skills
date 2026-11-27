@@ -1,0 +1,5 @@
+Planted defects:
+A. Unit mismatch across files: api.py passes euros as a float (12.5) but refund() expects integer cents, so a 12.50 € refund refunds 12.5 cents (or a float sneaks into cents).
+B. Cumulative over-refund: refund() checks amount against captured only, not captured minus already refunded, so repeated refunds can exceed the captured amount.
+C. No authorization or caller check on the refund endpoint: anyone who can call handle_refund can refund any payment (also acceptable: missing validation of payment_id / KeyError -> 500).
+Not false positives: missing idempotency key, float parsing of user input, logging last 4 digits is fine (logging the full card would be a defect, but it logs only the last 4).

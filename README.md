@@ -2,10 +2,10 @@
   <img src="docs/img/logo.svg" width="96" alt="Master Your Skills logo">
 </p>
 <h1 align="center">Master Your Skills</h1>
-<p align="center"><em>Short skills for coding agents. Each one proves it works.</em></p>
+<p align="center"><em>Short skills for coding and office work. Each one proves it works.</em></p>
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-C6F432?style=flat-square&labelColor=0B1020" alt="MIT license"></a>
-  <a href="GLOSSARY.md"><img src="https://img.shields.io/badge/skills-23-C6F432?style=flat-square&labelColor=0B1020" alt="23 skills"></a>
+  <a href="GLOSSARY.md"><img src="https://img.shields.io/badge/skills-41-C6F432?style=flat-square&labelColor=0B1020" alt="41 skills"></a>
   <a href="benchmarks/results/"><img src="https://img.shields.io/badge/benchmarked-with%20%26%20without-C6F432?style=flat-square&labelColor=0B1020" alt="Benchmarked with and without"></a>
   <img src="https://img.shields.io/badge/works%20with-Claude%20·%20Codex%20·%20Cursor%20·%20Copilot%20·%20Gemini%20·%20Windsurf%20·%20more-4C5BD4?style=flat-square&labelColor=0B1020" alt="Works with many agents">
   <img src="https://img.shields.io/github/stars/skydoy/Master-Your-Skills?style=flat-square&color=C6F432&labelColor=0B1020" alt="Stars">
@@ -19,7 +19,7 @@
 </p>
 <p align="center"><img src="docs/img/hero.png" width="880" alt="Master Your Skills: short skills that prove they work"></p>
 
-**What is this?** A set of instructions ("skills") that make AI coding agents work like a careful senior engineer: ask the right questions, write less code, test what matters, find the real cause of bugs. Each skill is under 500 words, so it costs few tokens, and each one is measured with and without it on the same task.
+**What is this?** A set of instructions ("skills") that make AI agents work like a careful senior colleague. For code: ask the right questions, write less code, test what matters, find the real cause of bugs. For the office: speeches, company decks, emails that sound human, briefs, minutes, plans and procedures, without invented facts. Each skill is under 500 words, so it costs few tokens, and each one is measured with and without it on the same task.
 
 ## Install in 3 minutes
 
@@ -60,6 +60,12 @@ Download [`AGENTS.md`](https://raw.githubusercontent.com/skydoy/Master-Your-Skil
 | Kiro | `.kiro/steering/master-your-skills.md` |
 | Any other agent | paste the contents into its "rules" or "custom instructions" setting |
 
+### Option 4: claude.ai or the Claude app (no coding)
+
+1. Open the [`dist/`](dist/) folder and download the skill you want, for example `email.zip` (click it, then "Download raw file").
+2. In Claude, go to **Settings → Capabilities → Skills → Upload skill** and pick the `.zip`.
+3. Start a chat and ask, for example: "email: reply to this…".
+
 ### Check it works
 
 Ask your agent: **"start: I want to add a login page"**. It should come back with a few numbered questions, each with a suggested answer, before writing any code.
@@ -68,14 +74,18 @@ Ask your agent: **"start: I want to add a login page"**. It should come back wit
 
 ![Benchmark](docs/img/benchmark.png)
 
-Honest first results (Sonnet, 5 small tasks, 3 runs per arm, hidden tests):
+Honest results so far (Sonnet, 9 tasks, 3 to 4 runs per arm; hidden tests, or a fixed rubric graded by a judge that sees the same sources):
 
-- **`tdd` and `debug`** make the agent leave a regression test every time (0% → 100%), with the same correctness. They cost more tokens, because tests are extra work.
-- **`lean` and `check-code`** match the baseline on these tasks: the tasks were too easy to separate them. Harder tasks are next.
+- **`start`** turns a vague ask ("add an export for the sales report") into the right result: **25% → 100%** correct, because it asks first instead of guessing. It costs about twice the output tokens.
+- **`tdd` and `debug`** make the agent leave a regression test every time (**0% → 100%**), with the same correctness. They cost more tokens, because tests are extra work.
+- **`email`**: 75% → 83% on a reply graded for answering every question, inventing nothing and sounding human. Too few runs to call it a win yet.
+- **`lean` and `check-code`** match the baseline: Sonnet already gets these tasks right without help. We keep looking for tasks hard enough to separate them, and will say so if they never do.
 
-Full numbers per skill: [GLOSSARY.md](GLOSSARY.md). Raw runs: [`benchmarks/results/`](benchmarks/results/). Reproduce: `python3 benchmarks/run.py 3 sonnet`.
+Full numbers per skill: [GLOSSARY.md](GLOSSARY.md). Raw runs: [`benchmarks/results/`](benchmarks/results/). Reproduce: `python3 benchmarks/run.py 3 sonnet` (one task: `BENCH_TASKS=start-export python3 benchmarks/run.py 3 sonnet`).
 
 ## The skills
+
+### Coding skills
 
 | Phase | Skills |
 |---|---|
@@ -86,6 +96,19 @@ Full numbers per skill: [GLOSSARY.md](GLOSSARY.md). Raw runs: [`benchmarks/resul
 | Build | `build` · `tdd` · `frontend-ui` · `parallel` · `context-diet` |
 | Verify | `debug` · `check-code` · `browser-test` · `accessibility` · `performance` · `security` · `audit` · `quality-bar` |
 | Ship | `git` · `ship` · `docs` |
+
+### Office skills
+
+Each works in two modes: **Direct** (paste everything, get the result) or **Guided** (one round of questions, each with a suggested answer, so "ok" accepts them all). Missing facts show as `[VALUE]`, never invented.
+
+| For | Skills |
+|---|---|
+| Write and present | `speech` · `deck` (uses your company template) · `email` (new or reply, sounds like you) |
+| Leaders | `exec-brief` · `decision` · `board-pack` · `okr` · `crisis-comms` |
+| Managers | `meeting` · `weekly-status` · `feedback-review` · `project-plan` · `delegate` |
+| Everyday work | `sop` · `summarize-doc` · `clear-request` · `spreadsheet-help` · `plan-my-day` |
+
+Try it: **"email: reply to this, say the delivery moved to 12 March"** and paste the email.
 
 What each one does, when to use it, and its measured gain: **[GLOSSARY.md](GLOSSARY.md)**.
 

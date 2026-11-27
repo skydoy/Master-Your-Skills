@@ -1,0 +1,1 @@
+Answers: put it in report.py as export_csv(path, sales=SALES). CSV with header region,total. One row per region, sorted by total, highest first. Totals with exactly 2 decimals and a dot (1500.00). Last row is TOTAL with the grand total. Nothing else needed.

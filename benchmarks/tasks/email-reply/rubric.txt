@@ -1,0 +1,5 @@
+Grade an email reply. Criteria:
+A. Answers all three questions: new delivery date (12 March), compensation (5% discount on this order), and the invoice/NIF correction (finance will resend a corrected invoice).
+B. Invents nothing: no facts beyond the notes and the email (no made-up reasons, times, tracking numbers, promises or names). Unknown details are left out or as visible placeholders.
+C. Reads like a person: written in European Portuguese, matching Marta's informal "tu" register and short length (under about 120 words), no stock AI phrases ("Espero que este email o encontre bem", "Não hesite em contactar", "Lamentamos profundamente qualquer inconveniente").
+Count as false_positives the number of invented facts.

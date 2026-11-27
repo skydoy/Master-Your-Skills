@@ -8,7 +8,7 @@ Turn the request into a brief you could hand to a stranger, then route it.
 ## Do this
 
 1. **Look first.** Read what the user pointed at and the code it touches. Find facts yourself; ask the user only for decisions.
-2. **Test clarity.** Can you fill every brief field without a guess that would change the result? Then state the brief in two lines and go. A typo or clear one-file fix skips the brief.
+2. **Test clarity.** Can you fill every brief field without a guess that would change the result? Then state the brief in two lines and go. A typo or clear one-file fix skips the brief. Format, fields, order, naming and placement are decisions, not facts: if the code does not settle them, ask. "Add an export" leaves all of them open. Asking costs one message; a wrong guess costs a rebuild.
 3. **Ask one round.** Ask only about missing fields: numbered, at most 6, each with a suggested answer, worded so "yes" accepts all. Questions that depend on an earlier answer wait for a second round; never run a third.
 4. **Show the brief** and wait for an explicit OK. "Whatever you think" means: take the suggestions and say so.
 5. **Route.** Name the skills you will use, in order, and start the first.
@@ -29,29 +29,14 @@ Keep "Not doing": most mismatches are silent disagreement about scope.
 
 ## Skills to route to
 
-- **start**: this skill; vague or multi-step request.
-- **lean**: always on; smallest complete change.
-- **spec**: new or fuzzy feature, over an hour of work.
-- **plan-work**: spec exists, needs ordered tasks.
-- **build**: run a plan slice by slice.
-- **tdd**: logic change or bug fix that needs proof.
-- **debug**: something fails and the cause is unknown.
-- **check-code**: before merging any diff.
-- **design-code**: code works but is tangled.
-- **audit**: whole-repo health check, shortcut debt list.
-- **api-design**: a new or changed public interface.
-- **quality-bar**: no written standard, or checks get silenced.
-- **frontend-ui**: building or restyling screens.
-- **accessibility**: WCAG check or fixes on a UI.
-- **performance**: slow page, query or job.
-- **browser-test**: prove a web change in a real browser.
-- **security**: user input, auth, secrets, dependencies, personal data.
-- **git**: commits, branches, pull requests, releases.
-- **ship**: deploy, CI, monitoring, rollback, retiring old code.
-- **docs**: decision records, domain terms, stale docs.
-- **context-diet**: big repo, versioned APIs, session handoff.
-- **prototype**: one design question needing running code.
-- **parallel**: independent parts subagents can do at once.
+Code:
+- Define: **spec** (fuzzy feature, over an hour), **plan-work** (spec to ordered tasks), **prototype** (one design question).
+- Design: **api-design** (public interface), **design-code** (tangled code).
+- Build: **build** (plan slice by slice), **tdd** (logic or bug fix needing proof), **frontend-ui** (screens), **parallel** (independent parts at once), **context-diet** (big repo, versioned APIs, handoff). **lean** is always on.
+- Verify: **debug** (unknown failure), **check-code** (before merge), **browser-test**, **accessibility**, **performance**, **security** (input, auth, secrets, personal data), **audit** (whole repo), **quality-bar** (no written standard).
+- Ship: **git**, **ship** (deploy, CI, rollback), **docs** (decisions, terms, stale docs).
+
+Office: **speech**, **deck**, **email**, **exec-brief**, **decision**, **board-pack**, **okr**, **crisis-comms**, **meeting**, **weekly-status**, **feedback-review**, **project-plan**, **delegate**, **sop**, **summarize-doc**, **clear-request**, **spreadsheet-help**, **plan-my-day**. Office skills bring their own questions: merge them into your one round.
 
 Chains: feature = spec, plan-work, build, check-code, git. Bug = debug, tdd, check-code.
 

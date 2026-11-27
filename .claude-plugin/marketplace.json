@@ -4,12 +4,12 @@
     "name": "skydoy",
     "url": "https://github.com/skydoy"
   },
-  "description": "Master Your Skills: short skills for Claude Code that prove they work.",
+  "description": "Master Your Skills: short skills for coding and office work that prove they work.",
   "plugins": [
     {
       "name": "master-your-skills",
       "source": "./",
-      "description": "23 short, original engineering skills plus base rules. Every skill is benchmarked with and without it."
+      "description": "41 short, original skills for coding and office work, plus base rules. Every skill is benchmarked with and without it."
     }
   ]
 }

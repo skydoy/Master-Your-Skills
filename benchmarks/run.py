@@ -1,4 +1,4 @@
-"""With/without-skill benchmark. Usage: python3 benchmarks/run.py [runs] [model]
+"""With/without-skill benchmark. Usage: [BENCH_TASKS=a,b] python3 benchmarks/run.py [runs] [model]
 
 Each task runs in a fresh copy of tasks/<task>/repo, once with no skill and once with the
 task's skill appended to the system prompt. Plugins and hooks are disabled in both arms so
@@ -23,17 +23,23 @@ TASKS = {  # task -> skill under test
     "group-by": "lean",
     "cart-discount": "tdd",
     "review-diff": "check-code",
+    "lean-reuse": "lean",        # house helpers exist; hidden test checks they were reused
+    "review-cross": "check-code",  # bug sits across two files
+    "start-export": "start",     # vague ask; the spec is given only if the agent asks for it
+    "email-reply": "email",      # office: judged on a fixed rubric
 }
 CLEAN = json.dumps({"disableAllHooks": True, "enabledPlugins": {
     "ponytail@synced": False, "agent-skills@synced": False, "master-your-skills@master-your-skills": False}})
 
 
-def claude(prompt, cwd, model, system=None):
+def claude(prompt, cwd, model, system=None, resume=None):
     cmd = ["claude", "-p", prompt, "--model", model, "--output-format", "json",
            "--settings", CLEAN, "--disable-slash-commands",
            "--allowedTools", "Read,Edit,Write,Glob,Grep,Bash"]
     if system:
         cmd += ["--append-system-prompt", system]
+    if resume:
+        cmd += ["--resume", resume]
     out = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=900)
     try:
         return json.loads(out.stdout)
@@ -74,12 +80,15 @@ def hidden_score(task, cwd):
     return passed / total if total else 0.0
 
 
-def review_score(cwd, model):
-    review = cwd / "REVIEW.md"
+def review_score(task, cwd, model):
+    review = next((cwd / n for n in ("REVIEW.md", "REPLY.md") if (cwd / n).exists()), cwd / "REVIEW.md")
     if not review.exists():
         return 0.0, 0
-    rubric = (ROOT / "tasks" / "review-diff" / "rubric.txt").read_text()
-    ask = (f"{rubric}\n\nReview to grade:\n<review>\n{review.read_text()[:12000]}\n</review>\n"
+    rubric = (ROOT / "tasks" / task / "rubric.txt").read_text()
+    # the judge sees what the agent saw: the request and the original files
+    src = (ROOT / "tasks" / task / "prompt.txt").read_text() + "".join(
+        f"\n--- {f.name} ---\n{f.read_text()}" for f in sorted((ROOT / "tasks" / task / "repo").iterdir()) if f.is_file())
+    ask = (f"{rubric}\n\nSource material the author had:\n<source>\n{src}\n</source>\n\nReview to grade:\n<review>\n{review.read_text()[:12000]}\n</review>\n"
            'Reply with only JSON: {"A":bool,"B":bool,"C":bool,"false_positives":int}')
     res = claude(ask, cwd, model)
     m = re.search(r"\{.*\}", res.get("result", ""), re.S)
@@ -96,14 +105,27 @@ def run_one(task, arm, i, model):
             subprocess.run(c, cwd=cwd, capture_output=True)
         prompt = (ROOT / "tasks" / task / "prompt.txt").read_text().strip()
         res = claude(prompt, cwd, model, skill_text(TASKS[task]) if arm == "skill" else None)
+        asked = False
+        answer = ROOT / "tasks" / task / "answer.txt"
         code, tests = diff_lines(cwd)
+        if answer.exists() and code == 0 and not res.get("is_error"):
+            # the agent stopped to ask: play the user and give the spec once
+            asked = True
+            res2 = claude(answer.read_text().strip(), cwd, model,
+                          skill_text(TASKS[task]) if arm == "skill" else None, res.get("session_id"))
+            for k in ("total_cost_usd", "duration_ms", "num_turns"):
+                res[k] = (res.get(k) or 0) + (res2.get(k) or 0)
+            res.setdefault("usage", {})["output_tokens"] = ((res.get("usage", {}).get("output_tokens") or 0)
+                                                            + (res2.get("usage", {}).get("output_tokens") or 0))
+            res["is_error"] = res2.get("is_error")
+            code, tests = diff_lines(cwd)
         row = {"task": task, "skill": TASKS[task], "arm": arm, "run": i, "model": model,
                "error": bool(res.get("is_error")), "cost_usd": res.get("total_cost_usd"),
                "output_tokens": res.get("usage", {}).get("output_tokens"),
                "turns": res.get("num_turns"), "seconds": (res.get("duration_ms") or 0) / 1000,
-               "code_lines": code, "test_lines": tests}
-        if task == "review-diff":
-            row["correct"], row["false_positives"] = review_score(cwd, model)
+               "code_lines": code, "test_lines": tests, "asked": asked}
+        if (ROOT / "tasks" / task / "rubric.txt").exists():
+            row["correct"], row["false_positives"] = review_score(task, cwd, model)
         else:
             row["correct"] = hidden_score(task, cwd)
         return row
@@ -114,7 +136,8 @@ def main():
     model = sys.argv[2] if len(sys.argv) > 2 else "sonnet"
     out = ROOT / "results" / f"{datetime.date.today()}.jsonl"
     out.parent.mkdir(exist_ok=True)
-    jobs = [(t, a, i) for t in TASKS for a in ("none", "skill") for i in range(runs)]
+    only = os.environ.get("BENCH_TASKS", "").split(",") if os.environ.get("BENCH_TASKS") else list(TASKS)
+    jobs = [(t, a, i) for t in only for a in ("none", "skill") for i in range(runs)]
     with cf.ThreadPoolExecutor(int(os.environ.get("BENCH_WORKERS", 6))) as pool, out.open("a") as f:
         for row in pool.map(lambda j: run_one(*j, model), jobs):
             f.write(json.dumps(row) + "\n")

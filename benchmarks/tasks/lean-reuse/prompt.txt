@@ -1,0 +1,1 @@
+Add a function export_invoices(invoices, path) to shop/invoices.py. It writes a CSV file with header id,customer,total and one row per invoice: the invoice id, the customer name as a URL slug, and the invoice total including VAT formatted the way the shop formats euro amounts.

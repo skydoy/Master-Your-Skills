@@ -43,7 +43,7 @@ Never commit secrets. Ask before anything hard to undo: deleting data, schema ch
 
 ## Skills
 
-If the Master Your Skills plugin is installed, use `start` for anything vague or large; it picks the right skill. Main ones: `spec`, `plan-work`, `build`, `tdd`, `debug`, `check-code`, `design-code`, `security`, `ship`, `parallel`.
+If the Master Your Skills plugin is installed, use `start` for anything vague or large; it picks the right skill. Main ones: `spec`, `plan-work`, `build`, `tdd`, `debug`, `check-code`, `security`, `ship`, `parallel`. Office: `email`, `deck`, `speech`, `meeting`, `exec-brief` and more (see GLOSSARY.md).
 
 ## Reply
 

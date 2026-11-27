@@ -7,12 +7,17 @@ Every skill, what it is for, and what it measurably changes. Call a skill by nam
 Same task and model, run with and without the skill; hidden tests decide "correct". Skills not in this table have not been benchmarked yet.
 
 <!-- gains:start -->
-| Skill | Runs | Correct (without → with) | Wrote a test | Output tokens |
-|---|---|---|---|---|
-| `check-code` | 3+3 | 100% → 100% | 0% → 0% | +33% |
-| `debug` | 3+3 | 100% → 100% | 0% → 100% | +90% |
-| `lean` | 6+6 | 100% → 100% | 0% → 0% | +15% |
-| `tdd` | 3+3 | 100% → 100% | 0% → 100% | +290% |
+| Skill | Task | Runs | Correct (without → with) | Wrote a test | Output tokens |
+|---|---|---|---|---|---|
+| `check-code` | review-cross | 4+4 | 100% → 100% | 0% → 0% | +35% |
+| `check-code` | review-diff | 3+3 | 100% → 100% | 0% → 0% | +33% |
+| `debug` | fix-duration | 3+3 | 100% → 100% | 0% → 100% | +90% |
+| `email` | email-reply | 4+4 | 75% → 83% | 0% → 0% | +21% |
+| `lean` | group-by | 3+3 | 100% → 100% | 0% → 0% | +20% |
+| `lean` | json-flag | 3+3 | 100% → 100% | 0% → 0% | +13% |
+| `lean` | lean-reuse | 4+4 | 100% → 100% | 0% → 0% | -10% |
+| `start` | start-export | 4+4 | 25% → 100% | 0% → 0% | +119% |
+| `tdd` | cart-discount | 3+3 | 100% → 100% | 0% → 100% | +290% |
 <!-- gains:end -->
 
 ![Benchmark](docs/img/benchmark.png)
@@ -76,3 +81,43 @@ Same task and model, run with and without the skill; hidden tests decide "correc
 | `git` | Turn work into clean git history and reviewable pull requests. Use when committing, writing a commit message, splitting a messy working tree into commits, naming or cleaning up branches, opening or describing a PR, tagging a release, picking a version bump or writing a changelog entry. |
 | `ship` | Get a change to production safely and keep it healthy. Use when deploying or launching, asking "is this ready to ship?", setting up CI gates, planning a staged rollout or rollback, adding logs/metrics/alerts, or removing an old API, feature or database column. |
 | `docs` | Write down decisions and domain terms so they stay true. Use when recording an architecture decision (ADR), defining or settling project vocabulary (GLOSSARY.md), updating a README or API docs after a change, or checking whether a doc is stale or "out of date" with the code. |
+
+Office skills work in two modes: **Direct** (paste everything, get the result) or **Guided** (one round of questions, each with a suggested answer). They never invent facts: anything missing shows as `[VALUE]`.
+
+### Office: write and present
+
+| Skill | Use it for |
+|---|---|
+| `speech` | Writes speeches and talks sized to the minute, made for the ear rather than the page. Use when the user says "write a speech", "toast", "keynote", "talk", "remarks for", "wedding speech", "opening words", "I have to speak at". |
+| `deck` | Builds corporate PowerPoint decks on the company template, storyline first, with native charts from real data and a rendered QA pass. Use when the user says "make a deck", "PowerPoint", "slides for", "presentation for the board", "build on our template", or gives a .pptx/.potx. |
+| `email` | Writes new emails and replies that sound like a person wrote them. Use when the user says "write an email", "draft a reply", "answer this email", "reply to", "how do I respond", "email to my boss/client", or pastes an email and asks what to say. |
+
+### Office: leaders
+
+| Skill | Use it for |
+|---|---|
+| `exec-brief` | Turns long reports, email threads or data into a one-page executive brief with decision, 3 key facts, risks, numbers, recommendation and cost of inaction. Use for "executive summary", "one-pager", "brief for the CEO", "resumo executivo", "resumir este relatório". |
+| `decision` | Compares 2-5 options against explicit weighted criteria (cost, risk, time, reversibility), shows the trade-off table, recommends one and names what would change it. Use for "compare options", "which should we choose", "decision memo", "decidir entre", "comparar opções". |
+| `board-pack` | Assembles a board or committee meeting pack from loose inputs: agenda, a paper per item with decision requested, KPIs vs target, risks, appendices; flags what is missing. Use for "board pack", "committee papers", "pauta da reunião", "pacote para o conselho". |
+| `okr` | Converts strategy text into 3-5 objectives, each with 2-4 measurable key results, owners, baselines and targets; rejects activities disguised as results. Use for "write OKRs", "turn strategy into goals", "metas trimestrais", "objetivos e resultados-chave". |
+| `crisis-comms` | Fast, facts-only drafts for an incident: internal note, customer or public statement, press holding line and FAQ, with what we know, don't know and next update time. Use for "incident statement", "outage message", "press line", "comunicado de crise", "nota de imprensa". |
+
+### Office: managers
+
+| Skill | Use it for |
+|---|---|
+| `meeting` | Prepares a meeting agenda (goal and time box per item) or writes minutes from notes or a transcript (decisions, owners, deadlines, open questions). Use for "meeting agenda", "prepare a meeting", "meeting minutes", "ata da reunião", "pauta", "resumir reunião". |
+| `weekly-status` | Turns loose notes into a weekly project status report with traffic light, done, next, blockers and metrics vs plan. Use for "weekly status", "status report", "project update", "relatório semanal", "status do projeto", "RAG status". |
+| `feedback-review` | Writes fair, specific performance reviews and feedback using situation-behaviour-impact, strengths, growth areas and agreed goals, and flags biased or vague wording. Use for "performance review", "give feedback", "avaliação de desempenho", "feedback para", "review wording". |
+| `project-plan` | Builds a project plan table with tasks, owners, dates, dependencies, risks, critical path and milestones, as Markdown or CSV for Excel; asks for deadline and team capacity. Use for "project plan", "timeline", "cronograma", "plano de projeto", "work breakdown". |
+| `delegate` | Turns an idea into one clear, ready-to-send request for the team with what, why, deadline, success measure, constraints and who to ask. Use for "delegate this", "write a request for my team", "delegar tarefa", "pedido para a equipe", "assign this task". |
+
+### Office: everyday work
+
+| Skill | Use it for |
+|---|---|
+| `sop` | Writes or improves a step-by-step procedure (SOP) from a rough or spoken explanation. Use for "write a procedure", "SOP", "how-to for the team", "document this process", "procedimento", "passo a passo", "instrução de trabalho". |
+| `summarize-doc` | Summarises a contract, manual or long email for a specific task: what it means for you, deadlines, obligations, numbers, risks, with page references. Use for "summarise this", "what do I need to do", "resumir contrato", "resumo do documento", "prazos e obrigações". |
+| `clear-request` | Turns a problem into a clear request to a boss, IT support or a supplier: what happened, impact, what was tried, what is needed, by when. Use for "write to IT", "ask my manager for", "report a problem", "pedido ao fornecedor", "escrever ao suporte", "reclamação". |
+| `spreadsheet-help` | Explains and writes Excel or Google Sheets formulas, pivot tables and charts from what the user wants to get. Use for "excel formula", "fórmula excel", "PROCV", "tabela dinâmica", "pivot table", "gráfico", "sum if", "why does my formula fail". |
+| `plan-my-day` | Turns a task list into a realistic day plan by priority, deadlines, effort and energy, with time blocks, buffers, and what to drop or delegate. Use for "plan my day", "I have too much to do", "organise my tasks", "planear o dia", "organizar tarefas", "prioridades". |
